@@ -29,9 +29,12 @@ final class TimerView: NSView {
     }
 
     override func layout() {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
         super.layout()
         textField.frame = bounds
         updateLayerFrames()
+        CATransaction.commit()
     }
 
     override func updateTrackingAreas() {
@@ -112,6 +115,7 @@ final class TimerView: NSView {
         CATransaction.setDisableActions(true)
         layer?.backgroundColor = isExpanded ? NSColor.black.cgColor : NSColor.clear.cgColor
         layer?.cornerRadius = isExpanded ? 8 : 0
+        layer?.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         layer?.masksToBounds = isExpanded
         stealthBarLayer.isHidden = isExpanded
         textField.isHidden = !isExpanded
