@@ -3,6 +3,7 @@ import MacNotchTimerSupport
 
 final class TimerView: NSView {
     private let textField = NSTextField(labelWithString: "05:00")
+    private let stealthBarLayer = CALayer()
     private var remainingSeconds: Int
     private var timer: Timer?
     var onHoverChanged: ((Bool) -> Void)?
@@ -30,6 +31,7 @@ final class TimerView: NSView {
     override func layout() {
         super.layout()
         textField.frame = bounds
+        updateLayerFrames()
     }
 
     override func updateTrackingAreas() {
@@ -59,7 +61,9 @@ final class TimerView: NSView {
 
     private func configureView() {
         wantsLayer = true
-        layer?.backgroundColor = NSColor.black.cgColor
+        layer?.backgroundColor = NSColor.clear.cgColor
+        stealthBarLayer.backgroundColor = NSColor.black.withAlphaComponent(0.35).cgColor
+        layer?.addSublayer(stealthBarLayer)
 
         textField.alignment = .center
         textField.textColor = .white
@@ -102,8 +106,18 @@ final class TimerView: NSView {
     }
 
     private func applyExpandedState() {
-        let backgroundColor: NSColor = isExpanded ? .black : .black.withAlphaComponent(0.35)
-        layer?.backgroundColor = backgroundColor.cgColor
+        layer?.backgroundColor = isExpanded ? NSColor.black.cgColor : NSColor.clear.cgColor
+        stealthBarLayer.isHidden = isExpanded
         textField.isHidden = !isExpanded
+        updateLayerFrames()
+    }
+
+    private func updateLayerFrames() {
+        stealthBarLayer.frame = CGRect(
+            x: bounds.minX,
+            y: bounds.maxY - NotchTimerGeometry.stealthHeight,
+            width: bounds.width,
+            height: NotchTimerGeometry.stealthHeight
+        )
     }
 }

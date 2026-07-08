@@ -22,9 +22,13 @@ struct NotchTimerGeometryTests {
         #expect(NotchTimerGeometry.notchWidth(leftArea: leftArea, rightArea: rightArea) == 260)
     }
 
-    @Test func presentationHeightsMatchStealthAndExpandedTimerStates() {
-        #expect(NotchTimerGeometry.Presentation.stealth.height == 6)
+    @Test func presentationHeightsMatchStealthHoverTargetAndExpandedTimerStates() {
+        #expect(NotchTimerGeometry.stealthHeight == 6)
+        #expect(NotchTimerGeometry.stealthHoverTargetHeight == 12)
+        #expect(NotchTimerGeometry.stealthHoverTargetHeight == NotchTimerGeometry.stealthHeight * 2)
+        #expect(NotchTimerGeometry.Presentation.stealth.height == NotchTimerGeometry.stealthHoverTargetHeight)
         #expect(NotchTimerGeometry.Presentation.expanded.height == 36)
+        #expect(NotchTimerGeometry.stealthHeight < NotchTimerGeometry.Presentation.stealth.height)
         #expect(NotchTimerGeometry.Presentation.stealth.height < NotchTimerGeometry.Presentation.expanded.height)
     }
 
@@ -46,9 +50,13 @@ struct NotchTimerGeometryTests {
             presentation: .expanded
         )
 
-        #expect(stealthFrame == CGRect(x: 651, y: 888, width: 210, height: 6))
+        #expect(stealthFrame == CGRect(x: 651, y: 882, width: 210, height: 12))
         #expect(expandedFrame == CGRect(x: 651, y: 858, width: 210, height: 36))
+        #expect(stealthFrame.maxY == topY)
+        #expect(expandedFrame.maxY == topY)
         #expect(stealthFrame.maxY == expandedFrame.maxY)
+        #expect(stealthFrame.minY == topY - NotchTimerGeometry.stealthHoverTargetHeight)
+        #expect(expandedFrame.minY == topY - NotchTimerGeometry.expandedHeight)
     }
 
     @Test func frameInVisibleFrameCentersNotchWidthFlushWithMenuBarBottom() {

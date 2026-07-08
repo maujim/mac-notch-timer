@@ -4,6 +4,7 @@ public enum NotchTimerGeometry {
     public static let fallbackNotchWidth: CGFloat = 210
     public static let expandedHeight: CGFloat = 36
     public static let stealthHeight: CGFloat = 6
+    public static let stealthHoverTargetHeight: CGFloat = stealthHeight * 2
     public static let verticalInset: CGFloat = 0
 
     public enum Presentation {
@@ -13,7 +14,7 @@ public enum NotchTimerGeometry {
         public var height: CGFloat {
             switch self {
             case .stealth:
-                NotchTimerGeometry.stealthHeight
+                NotchTimerGeometry.stealthHoverTargetHeight
             case .expanded:
                 NotchTimerGeometry.expandedHeight
             }
