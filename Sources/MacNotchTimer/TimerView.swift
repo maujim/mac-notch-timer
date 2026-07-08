@@ -80,7 +80,7 @@ final class TimerView: NSView {
         wantsLayer = true
         layer?.backgroundColor = NSColor.clear.cgColor
         
-        compactTrackLayer.backgroundColor = NSColor.systemGray.withAlphaComponent(0.3).cgColor
+        compactTrackLayer.backgroundColor = NSColor.systemGray.withAlphaComponent(0.4).cgColor
         compactTrackLayer.cornerRadius = NotchTimerGeometry.compactCornerRadius
         compactTrackLayer.masksToBounds = true
         layer?.addSublayer(compactTrackLayer)
@@ -148,18 +148,20 @@ final class TimerView: NSView {
         CATransaction.setDisableActions(true)
         let barHeight = NotchTimerGeometry.compactHeight
         let progress = totalSeconds > 0 ? max(0.0, min(1.0, Double(remainingSeconds) / Double(totalSeconds))) : 0.0
-        let fullWidth = bounds.width
+        
+        let horizontalPadding: CGFloat = 2.0
+        let maxBarWidth = bounds.width - (horizontalPadding * 2.0)
         let barY = bounds.maxY - barHeight
         
         compactTrackLayer.frame = CGRect(
-            x: bounds.minX,
+            x: bounds.minX + horizontalPadding,
             y: barY,
-            width: fullWidth,
+            width: maxBarWidth,
             height: barHeight
         )
         
-        let barWidth = fullWidth * CGFloat(progress)
-        let barX = bounds.minX + (fullWidth - barWidth) / 2.0
+        let barWidth = maxBarWidth * CGFloat(progress)
+        let barX = bounds.minX + horizontalPadding + (maxBarWidth - barWidth) / 2.0
         compactBarLayer.frame = CGRect(
             x: barX,
             y: barY,
