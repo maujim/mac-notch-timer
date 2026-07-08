@@ -23,10 +23,9 @@ struct NotchTimerGeometryTests {
     }
 
     @Test func presentationHeightsMatchCompactHoverTargetAndExpandedTimerStates() {
-        #expect(NotchTimerGeometry.compactHeight == 6)
+        #expect(NotchTimerGeometry.compactHeight == 3)
         #expect(NotchTimerGeometry.compactHoverTargetHeight == 12)
-        #expect(NotchTimerGeometry.compactHoverTargetHeight == NotchTimerGeometry.compactHeight * 2)
-        #expect(NotchTimerGeometry.compactCornerRadius == 4)
+        #expect(NotchTimerGeometry.compactCornerRadius == 1.5)
         #expect(NotchTimerGeometry.Presentation.compact.height == NotchTimerGeometry.compactHoverTargetHeight)
         #expect(NotchTimerGeometry.Presentation.expanded.height == 36)
         #expect(NotchTimerGeometry.compactHeight < NotchTimerGeometry.Presentation.compact.height)

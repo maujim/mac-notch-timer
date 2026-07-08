@@ -3,10 +3,10 @@ import CoreGraphics
 public enum NotchTimerGeometry {
     public static let fallbackNotchWidth: CGFloat = 210
     public static let expandedHeight: CGFloat = 36
-    public static let compactHeight: CGFloat = 6
-    public static let compactHoverTargetHeight: CGFloat = compactHeight * 2
+    public static let compactHeight: CGFloat = 3
+    public static let compactHoverTargetHeight: CGFloat = 12
     public static let verticalInset: CGFloat = 0
-    public static let compactCornerRadius: CGFloat = 4
+    public static let compactCornerRadius: CGFloat = 1.5
 
     public enum Presentation {
         case compact
