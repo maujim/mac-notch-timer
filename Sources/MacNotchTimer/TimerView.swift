@@ -3,6 +3,7 @@ import MacNotchTimerSupport
 
 final class TimerView: NSView {
     private let textField = NSTextField(labelWithString: "05:00")
+    private let compactTrackLayer = CALayer()
     private let compactBarLayer = CALayer()
     private var remainingSeconds: Int
     private let totalSeconds: Int
@@ -78,6 +79,12 @@ final class TimerView: NSView {
     private func configureView() {
         wantsLayer = true
         layer?.backgroundColor = NSColor.clear.cgColor
+        
+        compactTrackLayer.backgroundColor = NSColor.systemGray.withAlphaComponent(0.3).cgColor
+        compactTrackLayer.cornerRadius = NotchTimerGeometry.compactCornerRadius
+        compactTrackLayer.masksToBounds = true
+        layer?.addSublayer(compactTrackLayer)
+        
         compactBarLayer.backgroundColor = NSColor.systemGreen.cgColor
         compactBarLayer.cornerRadius = NotchTimerGeometry.compactCornerRadius
         compactBarLayer.masksToBounds = true
@@ -129,6 +136,7 @@ final class TimerView: NSView {
         layer?.cornerRadius = isExpanded ? 8 : 0
         layer?.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         layer?.masksToBounds = isExpanded
+        compactTrackLayer.isHidden = false
         compactBarLayer.isHidden = false
         textField.isHidden = !isExpanded
         updateLayerFrames()
@@ -140,9 +148,18 @@ final class TimerView: NSView {
         CATransaction.setDisableActions(true)
         let barHeight = NotchTimerGeometry.compactHeight
         let progress = totalSeconds > 0 ? max(0.0, min(1.0, Double(remainingSeconds) / Double(totalSeconds))) : 0.0
-        let barWidth = bounds.width * CGFloat(progress)
-        let barX = bounds.minX + (bounds.width - barWidth) / 2.0
+        let fullWidth = bounds.width
         let barY = bounds.maxY - barHeight
+        
+        compactTrackLayer.frame = CGRect(
+            x: bounds.minX,
+            y: barY,
+            width: fullWidth,
+            height: barHeight
+        )
+        
+        let barWidth = fullWidth * CGFloat(progress)
+        let barX = bounds.minX + (fullWidth - barWidth) / 2.0
         compactBarLayer.frame = CGRect(
             x: barX,
             y: barY,
