@@ -5,6 +5,14 @@ final class TimerView: NSView {
     private let textField = NSTextField(labelWithString: "05:00")
     private var remainingSeconds: Int
     private var timer: Timer?
+    var onHoverChanged: ((Bool) -> Void)?
+    private var trackingArea: NSTrackingArea?
+    private var isExpanded = false {
+        didSet {
+            guard isExpanded != oldValue else { return }
+            applyExpandedState()
+        }
+    }
 
     init(duration: Int) {
         remainingSeconds = duration
@@ -24,6 +32,31 @@ final class TimerView: NSView {
         textField.frame = bounds
     }
 
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+
+        if let trackingArea {
+            removeTrackingArea(trackingArea)
+        }
+
+        let trackingArea = NSTrackingArea(
+            rect: bounds,
+            options: [.activeAlways, .inVisibleRect, .mouseEnteredAndExited],
+            owner: self,
+            userInfo: nil
+        )
+        addTrackingArea(trackingArea)
+        self.trackingArea = trackingArea
+    }
+
+    override func mouseEntered(with event: NSEvent) {
+        setExpanded(true)
+    }
+
+    override func mouseExited(with event: NSEvent) {
+        setExpanded(false)
+    }
+
     private func configureView() {
         wantsLayer = true
         layer?.backgroundColor = NSColor.black.cgColor
@@ -37,6 +70,7 @@ final class TimerView: NSView {
         textField.isSelectable = false
         textField.drawsBackground = false
         addSubview(textField)
+        applyExpandedState()
     }
 
     private func startTimer() {
@@ -60,5 +94,16 @@ final class TimerView: NSView {
 
     private func updateText() {
         textField.stringValue = CountdownFormatter.minutesAndSeconds(from: remainingSeconds)
+    }
+
+    private func setExpanded(_ expanded: Bool) {
+        isExpanded = expanded
+        onHoverChanged?(expanded)
+    }
+
+    private func applyExpandedState() {
+        let backgroundColor: NSColor = isExpanded ? .black : .black.withAlphaComponent(0.35)
+        layer?.backgroundColor = backgroundColor.cgColor
+        textField.isHidden = !isExpanded
     }
 }

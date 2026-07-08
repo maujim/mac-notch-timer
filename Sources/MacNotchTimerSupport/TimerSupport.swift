@@ -2,6 +2,23 @@ import CoreGraphics
 
 public enum NotchTimerGeometry {
     public static let fallbackNotchWidth: CGFloat = 210
+    public static let expandedHeight: CGFloat = 36
+    public static let stealthHeight: CGFloat = 6
+    public static let verticalInset: CGFloat = 0
+
+    public enum Presentation {
+        case stealth
+        case expanded
+
+        public var height: CGFloat {
+            switch self {
+            case .stealth:
+                NotchTimerGeometry.stealthHeight
+            case .expanded:
+                NotchTimerGeometry.expandedHeight
+            }
+        }
+    }
 
     public static func notchWidth(leftArea: CGRect?, rightArea: CGRect?) -> CGFloat {
         guard let leftArea, let rightArea else {
@@ -13,6 +30,24 @@ public enum NotchTimerGeometry {
 
     public static func notchWidth(leftAreaMaxX: CGFloat, rightAreaMinX: CGFloat) -> CGFloat {
         max(rightAreaMinX - leftAreaMaxX, fallbackNotchWidth)
+    }
+
+    public static func frame(centeredAtX centerX: CGFloat, topY: CGFloat, width: CGFloat, presentation: Presentation) -> CGRect {
+        CGRect(
+            x: (centerX - (width / 2)).rounded(),
+            y: (topY - presentation.height).rounded(),
+            width: width.rounded(),
+            height: presentation.height
+        )
+    }
+
+    public static func frame(in visibleFrame: CGRect, notchWidth: CGFloat, presentation: Presentation) -> CGRect {
+        frame(
+            centeredAtX: visibleFrame.midX,
+            topY: visibleFrame.maxY - verticalInset,
+            width: notchWidth,
+            presentation: presentation
+        )
     }
 }
 

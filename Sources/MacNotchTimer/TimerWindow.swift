@@ -3,8 +3,6 @@ import MacNotchTimerSupport
 
 final class TimerWindow: NSPanel {
     private static let fallbackNotchWidth = NotchTimerGeometry.fallbackNotchWidth
-    private static let timerHeight: CGFloat = 36
-    private static let verticalInset: CGFloat = 6
 
     init(screen: NSScreen?) {
         let targetScreen = screen ?? NSScreen.main ?? NSScreen.screens.first
@@ -17,32 +15,58 @@ final class TimerWindow: NSPanel {
             defer: false
         )
 
-        backgroundColor = .black
-        isOpaque = true
+        backgroundColor = .clear
+        isOpaque = false
         hasShadow = false
         level = .statusBar
         collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
         hidesOnDeactivate = false
         isReleasedWhenClosed = false
-        contentView = TimerView(duration: 300)
+
+        let timerView = TimerView(duration: 300)
+        timerView.onHoverChanged = { [weak self] isHovered in
+            self?.setExpanded(isHovered)
+        }
+        contentView = timerView
     }
 
     func show() {
         orderFrontRegardless()
     }
 
+    private func setExpanded(_ expanded: Bool) {
+        let presentation: NotchTimerGeometry.Presentation = expanded ? .expanded : .stealth
+        guard frame.height != presentation.height else { return }
+
+        let newFrame = NotchTimerGeometry.frame(
+            centeredAtX: frame.midX,
+            topY: frame.maxY,
+            width: frame.width,
+            presentation: presentation
+        )
+        setFrame(newFrame, display: true, animate: true)
+    }
+
     private static func windowFrame(on screen: NSScreen?) -> NSRect {
         guard let screen else {
-            return NSRect(x: 0, y: 0, width: fallbackNotchWidth, height: timerHeight)
+            return NSRect(
+                x: 0,
+                y: 0,
+                width: fallbackNotchWidth,
+                height: NotchTimerGeometry.Presentation.stealth.height
+            )
         }
 
         let screenFrame = screen.frame
         let visibleFrame = screen.visibleFrame
         let width = notchWidth(on: screen)
-        let x = screenFrame.midX - (width / 2)
-        let y = visibleFrame.maxY - timerHeight - verticalInset
 
-        return NSRect(x: x.rounded(), y: y.rounded(), width: width.rounded(), height: timerHeight)
+        return NotchTimerGeometry.frame(
+            centeredAtX: screenFrame.midX,
+            topY: visibleFrame.maxY - NotchTimerGeometry.verticalInset,
+            width: width,
+            presentation: .stealth
+        )
     }
 
     private static func notchWidth(on screen: NSScreen) -> CGFloat {
