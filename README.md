@@ -2,6 +2,14 @@
 
 Mac Notch Timer is a small macOS menu-less timer that lives at the top of the screen around the MacBook notch. It starts a five-minute countdown, stays tucked into a thin hover target, and expands to show the remaining time when you hover near the notch.
 
+## Development
+
+To build and run the app from source:
+
+```sh
+swift run MacNotchTimer
+```
+
 ## Install with Homebrew
 
 Tap the Homebrew repository, then install the formula:
