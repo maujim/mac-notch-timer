@@ -3,8 +3,9 @@ import MacNotchTimerSupport
 
 final class TimerView: NSView {
     private let textField = NSTextField(labelWithString: "05:00")
-    private let stealthBarLayer = CALayer()
+    private let compactBarLayer = CALayer()
     private var remainingSeconds: Int
+    private let totalSeconds: Int
     private var timer: Timer?
     var onHoverChanged: ((Bool) -> Void)?
     private var trackingArea: NSTrackingArea?
@@ -17,6 +18,7 @@ final class TimerView: NSView {
 
     init(duration: Int) {
         remainingSeconds = duration
+        totalSeconds = duration
         super.init(frame: .zero)
         configureView()
         updateText()
@@ -32,7 +34,18 @@ final class TimerView: NSView {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         super.layout()
-        textField.frame = bounds
+        
+        let barHeight = NotchTimerGeometry.compactHeight
+        let textFieldHeight: CGFloat = 24
+        let remainingHeight: CGFloat = isExpanded ? (bounds.height - barHeight) : bounds.height
+        let textFieldY = bounds.minY + (remainingHeight - textFieldHeight) / 2
+        textField.frame = CGRect(
+            x: bounds.minX,
+            y: textFieldY,
+            width: bounds.width,
+            height: textFieldHeight
+        )
+        
         updateLayerFrames()
         CATransaction.commit()
     }
@@ -65,11 +78,10 @@ final class TimerView: NSView {
     private func configureView() {
         wantsLayer = true
         layer?.backgroundColor = NSColor.clear.cgColor
-        stealthBarLayer.backgroundColor = NSColor.black.withAlphaComponent(0.35).cgColor
-        stealthBarLayer.cornerRadius = NotchTimerGeometry.stealthCornerRadius
-        stealthBarLayer.masksToBounds = true
-        layer?.addSublayer(stealthBarLayer)
-
+        compactBarLayer.backgroundColor = NSColor.systemGreen.cgColor
+        compactBarLayer.cornerRadius = NotchTimerGeometry.compactCornerRadius
+        compactBarLayer.masksToBounds = true
+        layer?.addSublayer(compactBarLayer)
         textField.alignment = .center
         textField.textColor = .white
         textField.font = .monospacedDigitSystemFont(ofSize: 18, weight: .semibold)
@@ -103,8 +115,8 @@ final class TimerView: NSView {
 
     private func updateText() {
         textField.stringValue = CountdownFormatter.minutesAndSeconds(from: remainingSeconds)
+        updateLayerFrames()
     }
-
     private func setExpanded(_ expanded: Bool) {
         isExpanded = expanded
         onHoverChanged?(expanded)
@@ -117,18 +129,26 @@ final class TimerView: NSView {
         layer?.cornerRadius = isExpanded ? 8 : 0
         layer?.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         layer?.masksToBounds = isExpanded
-        stealthBarLayer.isHidden = isExpanded
+        compactBarLayer.isHidden = false
         textField.isHidden = !isExpanded
         updateLayerFrames()
         CATransaction.commit()
     }
 
     private func updateLayerFrames() {
-        stealthBarLayer.frame = CGRect(
-            x: bounds.minX,
-            y: bounds.maxY - NotchTimerGeometry.stealthHeight,
-            width: bounds.width,
-            height: NotchTimerGeometry.stealthHeight
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        let barHeight = NotchTimerGeometry.compactHeight
+        let progress = totalSeconds > 0 ? max(0.0, min(1.0, Double(remainingSeconds) / Double(totalSeconds))) : 0.0
+        let barWidth = bounds.width * CGFloat(progress)
+        let barX = bounds.minX + (bounds.width - barWidth) / 2.0
+        let barY = bounds.maxY - barHeight
+        compactBarLayer.frame = CGRect(
+            x: barX,
+            y: barY,
+            width: barWidth,
+            height: barHeight
         )
+        CATransaction.commit()
     }
 }

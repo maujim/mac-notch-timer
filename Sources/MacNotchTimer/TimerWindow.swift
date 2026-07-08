@@ -35,7 +35,7 @@ final class TimerWindow: NSPanel {
     }
 
     private func setExpanded(_ expanded: Bool) {
-        let presentation: NotchTimerGeometry.Presentation = expanded ? .expanded : .stealth
+        let presentation: NotchTimerGeometry.Presentation = expanded ? .expanded : .compact
         guard frame.height != presentation.height else { return }
 
         let newFrame = NotchTimerGeometry.frame(
@@ -53,7 +53,7 @@ final class TimerWindow: NSPanel {
                 x: 0,
                 y: 0,
                 width: fallbackNotchWidth,
-                height: NotchTimerGeometry.Presentation.stealth.height
+                height: NotchTimerGeometry.Presentation.compact.height
             )
         }
 
@@ -65,7 +65,7 @@ final class TimerWindow: NSPanel {
             centeredAtX: screenFrame.midX,
             topY: visibleFrame.maxY - NotchTimerGeometry.verticalInset,
             width: width,
-            presentation: .stealth
+            presentation: .compact
         )
     }
 

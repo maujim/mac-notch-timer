@@ -22,27 +22,27 @@ struct NotchTimerGeometryTests {
         #expect(NotchTimerGeometry.notchWidth(leftArea: leftArea, rightArea: rightArea) == 260)
     }
 
-    @Test func presentationHeightsMatchStealthHoverTargetAndExpandedTimerStates() {
-        #expect(NotchTimerGeometry.stealthHeight == 6)
-        #expect(NotchTimerGeometry.stealthHoverTargetHeight == 12)
-        #expect(NotchTimerGeometry.stealthHoverTargetHeight == NotchTimerGeometry.stealthHeight * 2)
-        #expect(NotchTimerGeometry.stealthCornerRadius == 4)
-        #expect(NotchTimerGeometry.Presentation.stealth.height == NotchTimerGeometry.stealthHoverTargetHeight)
+    @Test func presentationHeightsMatchCompactHoverTargetAndExpandedTimerStates() {
+        #expect(NotchTimerGeometry.compactHeight == 6)
+        #expect(NotchTimerGeometry.compactHoverTargetHeight == 12)
+        #expect(NotchTimerGeometry.compactHoverTargetHeight == NotchTimerGeometry.compactHeight * 2)
+        #expect(NotchTimerGeometry.compactCornerRadius == 4)
+        #expect(NotchTimerGeometry.Presentation.compact.height == NotchTimerGeometry.compactHoverTargetHeight)
         #expect(NotchTimerGeometry.Presentation.expanded.height == 36)
-        #expect(NotchTimerGeometry.stealthHeight < NotchTimerGeometry.Presentation.stealth.height)
-        #expect(NotchTimerGeometry.Presentation.stealth.height < NotchTimerGeometry.Presentation.expanded.height)
+        #expect(NotchTimerGeometry.compactHeight < NotchTimerGeometry.Presentation.compact.height)
+        #expect(NotchTimerGeometry.Presentation.compact.height < NotchTimerGeometry.Presentation.expanded.height)
     }
 
-    @Test func stealthAndExpandedFramesShareTopEdgeWhileExpandingDownward() {
+    @Test func compactAndExpandedFramesShareTopEdgeWhileExpandingDownward() {
         let topY: CGFloat = 894
         let width: CGFloat = 210
         let centerX: CGFloat = 756
 
-        let stealthFrame = NotchTimerGeometry.frame(
+        let compactFrame = NotchTimerGeometry.frame(
             centeredAtX: centerX,
             topY: topY,
             width: width,
-            presentation: .stealth
+            presentation: .compact
         )
         let expandedFrame = NotchTimerGeometry.frame(
             centeredAtX: centerX,
@@ -51,12 +51,12 @@ struct NotchTimerGeometryTests {
             presentation: .expanded
         )
 
-        #expect(stealthFrame == CGRect(x: 651, y: 882, width: 210, height: 12))
+        #expect(compactFrame == CGRect(x: 651, y: 882, width: 210, height: 12))
         #expect(expandedFrame == CGRect(x: 651, y: 858, width: 210, height: 36))
-        #expect(stealthFrame.maxY == topY)
+        #expect(compactFrame.maxY == topY)
         #expect(expandedFrame.maxY == topY)
-        #expect(stealthFrame.maxY == expandedFrame.maxY)
-        #expect(stealthFrame.minY == topY - NotchTimerGeometry.stealthHoverTargetHeight)
+        #expect(compactFrame.maxY == expandedFrame.maxY)
+        #expect(compactFrame.minY == topY - NotchTimerGeometry.compactHoverTargetHeight)
         #expect(expandedFrame.minY == topY - NotchTimerGeometry.expandedHeight)
     }
 

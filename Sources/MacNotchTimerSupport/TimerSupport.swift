@@ -3,19 +3,19 @@ import CoreGraphics
 public enum NotchTimerGeometry {
     public static let fallbackNotchWidth: CGFloat = 210
     public static let expandedHeight: CGFloat = 36
-    public static let stealthHeight: CGFloat = 6
-    public static let stealthHoverTargetHeight: CGFloat = stealthHeight * 2
+    public static let compactHeight: CGFloat = 6
+    public static let compactHoverTargetHeight: CGFloat = compactHeight * 2
     public static let verticalInset: CGFloat = 0
-    public static let stealthCornerRadius: CGFloat = 4
+    public static let compactCornerRadius: CGFloat = 4
 
     public enum Presentation {
-        case stealth
+        case compact
         case expanded
 
         public var height: CGFloat {
             switch self {
-            case .stealth:
-                NotchTimerGeometry.stealthHoverTargetHeight
+            case .compact:
+                NotchTimerGeometry.compactHoverTargetHeight
             case .expanded:
                 NotchTimerGeometry.expandedHeight
             }
