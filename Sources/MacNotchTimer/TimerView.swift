@@ -38,8 +38,9 @@ final class TimerView: NSView {
         
         let barHeight = NotchTimerGeometry.compactHeight
         let textFieldHeight: CGFloat = 24
-        let remainingHeight: CGFloat = isExpanded ? (bounds.height - barHeight) : bounds.height
-        let textFieldY = bounds.minY + (remainingHeight - textFieldHeight) / 2
+        let textAreaHeight = isExpanded ? (bounds.height - barHeight) : bounds.height
+        let verticalPadding = max(0, (textAreaHeight - textFieldHeight) / 2)
+        let textFieldY = bounds.minY + verticalPadding
         textField.frame = CGRect(
             x: bounds.minX,
             y: textFieldY,
@@ -149,7 +150,7 @@ final class TimerView: NSView {
         let barHeight = NotchTimerGeometry.compactHeight
         let progress = totalSeconds > 0 ? max(0.0, min(1.0, Double(remainingSeconds) / Double(totalSeconds))) : 0.0
         
-        let horizontalPadding: CGFloat = 2.0
+        let horizontalPadding: CGFloat = 4.0
         let maxBarWidth = bounds.width - (horizontalPadding * 2.0)
         let barY = bounds.maxY - barHeight
         
