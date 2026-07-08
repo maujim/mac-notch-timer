@@ -111,6 +111,8 @@ final class TimerView: NSView {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         layer?.backgroundColor = isExpanded ? NSColor.black.cgColor : NSColor.clear.cgColor
+        layer?.cornerRadius = isExpanded ? 8 : 0
+        layer?.masksToBounds = isExpanded
         stealthBarLayer.isHidden = isExpanded
         textField.isHidden = !isExpanded
         updateLayerFrames()
