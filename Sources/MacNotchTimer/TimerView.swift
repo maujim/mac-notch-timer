@@ -62,10 +62,8 @@ final class TimerView: NSView {
     private func configureView() {
         wantsLayer = true
         layer?.backgroundColor = NSColor.clear.cgColor
-        layer?.cornerRadius = NotchTimerGeometry.cornerRadius
-        layer?.masksToBounds = true
         stealthBarLayer.backgroundColor = NSColor.black.withAlphaComponent(0.35).cgColor
-        stealthBarLayer.cornerRadius = NotchTimerGeometry.cornerRadius
+        stealthBarLayer.cornerRadius = NotchTimerGeometry.stealthCornerRadius
         stealthBarLayer.masksToBounds = true
         layer?.addSublayer(stealthBarLayer)
 

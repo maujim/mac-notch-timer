@@ -6,7 +6,7 @@ public enum NotchTimerGeometry {
     public static let stealthHeight: CGFloat = 6
     public static let stealthHoverTargetHeight: CGFloat = stealthHeight * 2
     public static let verticalInset: CGFloat = 0
-    public static let cornerRadius: CGFloat = 8
+    public static let stealthCornerRadius: CGFloat = 4
 
     public enum Presentation {
         case stealth

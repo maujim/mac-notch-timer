@@ -26,7 +26,7 @@ struct NotchTimerGeometryTests {
         #expect(NotchTimerGeometry.stealthHeight == 6)
         #expect(NotchTimerGeometry.stealthHoverTargetHeight == 12)
         #expect(NotchTimerGeometry.stealthHoverTargetHeight == NotchTimerGeometry.stealthHeight * 2)
-        #expect(NotchTimerGeometry.cornerRadius == 8)
+        #expect(NotchTimerGeometry.stealthCornerRadius == 4)
         #expect(NotchTimerGeometry.Presentation.stealth.height == NotchTimerGeometry.stealthHoverTargetHeight)
         #expect(NotchTimerGeometry.Presentation.expanded.height == 36)
         #expect(NotchTimerGeometry.stealthHeight < NotchTimerGeometry.Presentation.stealth.height)
