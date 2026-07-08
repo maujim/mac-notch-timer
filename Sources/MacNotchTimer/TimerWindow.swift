@@ -44,7 +44,7 @@ final class TimerWindow: NSPanel {
             width: frame.width,
             presentation: presentation
         )
-        setFrame(newFrame, display: true, animate: expanded)
+        setFrame(newFrame, display: true, animate: false)
     }
 
     private static func windowFrame(on screen: NSScreen?) -> NSRect {
